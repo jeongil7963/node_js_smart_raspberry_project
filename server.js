@@ -56,7 +56,7 @@ parser.on('data', function(data) {
 
     var sensorObj = data.toString(); // json 형식 data를 객체형식으로 저장
     https://api.thingspeak.com/update?api_key=5MT39RFSMKOS0BF4&field1=0
-    var insert_url = '  https://api.thingspeak.com/update?api_key=5MT39RFSMKOS0BF4&field1=' + sensorObj;
+    var insert_url = '  http://api.thingspeak.com/update?api_key=5MT39RFSMKOS0BF4&field1=' + sensorObj;
     http.get(insert_url, (resp) => {
         let data = '';
         // A chunk of data has been recieved.
