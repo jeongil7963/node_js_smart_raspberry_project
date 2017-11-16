@@ -53,10 +53,27 @@ port.on('error', function(err) {
 
 parser.on('data', function(data) {
     console.log('Read and Send Data : ' + data);
+    var str = data.toString();
+    var strArray = str.split('-');
 
-    var sensorObj = data.toString(); // json 형식 data를 객체형식으로 저장
-    https://api.thingspeak.com/update?api_key=5MT39RFSMKOS0BF4&field1=0
-    var insert_url = '  http://api.thingspeak.com/update?api_key=5MT39RFSMKOS0BF4&field1=' + sensorObj;
+    if(strArray[0] == '1'){
+      console.log("data 1");
+        var sensorObj = strArray[1];
+        var insert_url = '  http://api.thingspeak.com/update?api_key=5MT39RFSMKOS0BF4&field1=' + sensorObj;
+    }else if(strArray[0] == '2'){
+      console.log("data 2");
+      var sensorObj = strArray[1];
+      var insert_url = '  http://api.thingspeak.com/update?api_key=5MT39RFSMKOS0BF4&field2=' + sensorObj;
+    }else if(strArray[0] == '3'){
+      console.log("data 3");
+      var sensorObj = strArray[1];
+      var insert_url = '  http://api.thingspeak.com/update?api_key=5MT39RFSMKOS0BF4&field3=' + sensorObj;
+    }else if(strArray[0] == '4'){
+      console.log("data 4");
+      var sensorObj = strArray[1];
+      var insert_url = '  http://api.thingspeak.com/update?api_key=5MT39RFSMKOS0BF4&field3=' + sensorObj;
+    }
+   // json 형식 data를 객체형식으로 저장
     http.get(insert_url, (resp) => {
         let data = '';
         // A chunk of data has been recieved.
