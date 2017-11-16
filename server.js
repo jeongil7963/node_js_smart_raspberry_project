@@ -32,8 +32,47 @@ var parsers = SerialPort.parsers;
 var parser = new parsers.Readline({
     delimiter: '\r\n'
 });
+var ubidots = require('ubidots');
 
-//라즈베리파이와 연결된 디바이스 주소
+
+var client = ubidots.createClient('A1E-dc9ee26385f40491ce247cfba6e2ab9a10c4');
+
+client.auth(function () {
+  var temp = this.getVariable('5a0d6be9c03f97493489e4ae');
+  var humi = this.getVariable('5a0d6be4c03f974989cc0ccb');
+  var sunny = this.getVariable('5a0d6be3c03f974989cc0cca');
+  var motion = this.getVariable('5a0d6be0c03f9749517c3af7');
+
+  parser.on('data', function(data) {
+      console.log('Read and Send Data : ' + data);
+      var str = data.toString();
+      var strArray = str.split('-');
+
+      if(strArray[0] == '1'){
+        console.log("data 1");
+          var sensorObj = strArray[1];
+          temp.saveValue(sensorObj);
+      }else if(strArray[0] == '2'){
+        console.log("data 2");
+        var sensorObj = strArray[1];
+        humi.saveValue(sensorObj);
+
+      }else if(strArray[0] == '3'){
+        console.log("data 3");
+        var sensorObj = strArray[1];
+        sunny.saveValue(sensorObj);
+
+      }else if(strArray[0] == '4'){
+        console.log("data 4");
+        var sensorObj = strArray[1];
+        motion.saveValue(sensorObj);
+      }
+
+  });
+
+});
+
+
 var port = new SerialPort('/dev/ttyACM0', {
     baudrate: 9600
 });
@@ -49,44 +88,4 @@ port.on('open', function() {
 // open errors will be emitted as an error event
 port.on('error', function(err) {
     console.log('Error: ', err.message);
-});
-
-parser.on('data', function(data) {
-    console.log('Read and Send Data : ' + data);
-    var str = data.toString();
-    var strArray = str.split('-');
-
-    if(strArray[0] == '1'){
-      console.log("data 1");
-        var sensorObj = strArray[1];
-        var insert_url = '  http://api.thingspeak.com/update?api_key=5MT39RFSMKOS0BF4&field1=' + sensorObj;
-    }else if(strArray[0] == '2'){
-      console.log("data 2");
-      var sensorObj = strArray[1];
-      var insert_url = '  http://api.thingspeak.com/update?api_key=5MT39RFSMKOS0BF4&field2=' + sensorObj;
-    }else if(strArray[0] == '3'){
-      console.log("data 3");
-      var sensorObj = strArray[1];
-      var insert_url = '  http://api.thingspeak.com/update?api_key=5MT39RFSMKOS0BF4&field3=' + sensorObj;
-    }else if(strArray[0] == '4'){
-      console.log("data 4");
-      var sensorObj = strArray[1];
-      var insert_url = '  http://api.thingspeak.com/update?api_key=5MT39RFSMKOS0BF4&field4=' + sensorObj;
-    }
-   // json 형식 data를 객체형식으로 저장
-    http.get(insert_url, (resp) => {
-        let data = '';
-        // A chunk of data has been recieved.
-        resp.on('data', (chunk) => {
-            data += chunk;
-        });
-
-        // The whole response has been received. Print out the result.
-        resp.on('end', () => {
-            //console.log(JSON.parse(data).explanation);
-        });
-
-    }).on("error", (err) => {
-        console.log("Error: " + err.message);
-    });
 });

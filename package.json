@@ -22,6 +22,7 @@
     "onoff": "^1.1.7",
     "serialport": "5.0.0",
     "socket.io-client": "2.0.3",
-    "socket_io": "^1.0.0"
+    "socket_io": "^1.0.0",
+    "ubidots": "0.0.4"
   }
 }
