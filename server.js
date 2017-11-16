@@ -71,7 +71,7 @@ parser.on('data', function(data) {
     }else if(strArray[0] == '4'){
       console.log("data 4");
       var sensorObj = strArray[1];
-      var insert_url = '  http://api.thingspeak.com/update?api_key=5MT39RFSMKOS0BF4&field3=' + sensorObj;
+      var insert_url = '  http://api.thingspeak.com/update?api_key=5MT39RFSMKOS0BF4&field4=' + sensorObj;
     }
    // json 형식 data를 객체형식으로 저장
     http.get(insert_url, (resp) => {
